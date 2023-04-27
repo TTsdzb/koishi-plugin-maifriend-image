@@ -1,0 +1,45 @@
+{
+  "name": "koishi-plugin-maifriend-image",
+  "description": "生成maimai“旅行伙伴加入”的图片。",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "contributors": [
+    "TTsdzb <ttsdzb@outlook.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/TTsdzb/koishi-plugin-maifriend-image",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TTsdzb/koishi-plugin-maifriend-image.git"
+  },
+  "scripts": {},
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin",
+    "maimai"
+  ],
+  "peerDependencies": {
+    "koishi": "^4.11.9"
+  },
+  "koishi": {
+    "description": {
+      "zh": "生成maimai“旅行伙伴加入”的图片。"
+    },
+    "service": {
+      "required": [
+        "puppeteer"
+      ],
+      "optional": [],
+      "implements": []
+    },
+    "locales": [
+      "zh"
+    ]
+  }
+}
