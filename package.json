@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-maifriend-image",
   "description": "生成maimai“旅行伙伴加入”的图片。",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
