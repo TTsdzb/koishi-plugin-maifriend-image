@@ -48,8 +48,8 @@ export function apply(ctx: Context) {
   ctx
     .command("maifriend [image:text]", "生成maimai旅行伙伴图片")
     .action((_, image) => {
-      const [code] = h.select(image || [], "image");
-      if (code && code.attrs.url) return generate(code.attrs.url);
+      const [code] = h.select(image || [], "img");
+      if (code && code.attrs.src) return generate(code.attrs.src);
       else {
         pendings.add(_.session.gid + _.session.uid);
         if (_.session.channel)
@@ -65,9 +65,9 @@ export function apply(ctx: Context) {
 
   ctx.middleware((session, next) => {
     if (!pendings.has(session.gid + session.uid)) return next();
-    const [code] = h.select(session.content || [], "image");
-    if (!code || !code.attrs.url) return next();
+    const [code] = h.select(session.content || [], "img");
+    if (!code || !code.attrs.src) return next();
     pendings.delete(session.gid + session.uid);
-    return generate(code.attrs.url);
+    return generate(code.attrs.src);
   });
 }
