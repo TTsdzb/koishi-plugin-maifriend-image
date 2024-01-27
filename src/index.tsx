@@ -8,8 +8,9 @@ export interface Config {}
 export const Config: Schema<Config> = Schema.object({});
 
 export function apply(ctx: Context) {
+  ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
+
   const imagePath = "file://" + path.resolve(__dirname, "frame.png");
-  const sendImage = "请发送图片。图片宽高比最好为1:1，否则只保留中间部分。";
   const pendings = new Set<string>();
 
   function generate(imageUrl: string) {
@@ -45,23 +46,21 @@ export function apply(ctx: Context) {
     );
   }
 
-  ctx
-    .command("maifriend [image:text]", "生成maimai旅行伙伴图片")
-    .action((_, image) => {
-      const [code] = h.select(image || [], "img");
-      if (code && code.attrs.src) return generate(code.attrs.src);
-      else {
-        pendings.add(_.session.gid + _.session.uid);
-        if (_.session.channel)
-          return (
-            <>
-              <at id={_.session.userId} />
-              {sendImage}
-            </>
-          );
-        else return sendImage;
-      }
-    });
+  ctx.command("maifriend [image:text]").action((_, image) => {
+    const [code] = h.select(image || [], "img");
+    if (code && code.attrs.src) return generate(code.attrs.src);
+    else {
+      pendings.add(_.session.gid + _.session.uid);
+      if (_.session.channel)
+        return (
+          <>
+            <at id={_.session.userId} />
+            <i18n path=".pleaseSendImage" />
+          </>
+        );
+      else return <i18n path=".pleaseSendImage" />;
+    }
+  });
 
   ctx.middleware((session, next) => {
     if (!pendings.has(session.gid + session.uid)) return next();
