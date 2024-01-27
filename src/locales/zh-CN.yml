@@ -5,3 +5,4 @@ commands:
       该指令接受一张图片。你可以在指令后附上图，也可以分成两条消息发送。
     messages:
       pleaseSendImage: 请发送图片。图片宽高比最好为1:1，否则只保留中间部分。
+      jobCanceled: 您未发送图片，操作已取消。

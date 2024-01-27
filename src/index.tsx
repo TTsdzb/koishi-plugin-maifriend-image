@@ -11,9 +11,8 @@ export function apply(ctx: Context) {
   ctx.i18n.define("zh-CN", require("./locales/zh-CN"));
 
   const imagePath = "file://" + path.resolve(__dirname, "frame.png");
-  const pendings = new Set<string>();
 
-  function generate(imageUrl: string) {
+  function generate(imageUrl: string): h {
     return (
       <html>
         <div
@@ -46,27 +45,25 @@ export function apply(ctx: Context) {
     );
   }
 
-  ctx.command("maifriend [image:text]").action((_, image) => {
-    const [code] = h.select(image || [], "img");
-    if (code && code.attrs.src) return generate(code.attrs.src);
-    else {
-      pendings.add(_.session.gid + _.session.uid);
-      if (_.session.channel)
-        return (
-          <>
-            <at id={_.session.userId} />
-            <i18n path=".pleaseSendImage" />
-          </>
-        );
-      else return <i18n path=".pleaseSendImage" />;
-    }
-  });
+  ctx.command("maifriend [image:text]").action(async ({ session }, image) => {
+    const [argCode] = h.select(image || [], "img");
 
-  ctx.middleware((session, next) => {
-    if (!pendings.has(session.gid + session.uid)) return next();
-    const [code] = h.select(session.content || [], "img");
-    if (!code || !code.attrs.src) return next();
-    pendings.delete(session.gid + session.uid);
-    return generate(code.attrs.src);
+    if (argCode && argCode.attrs.src) return generate(argCode.attrs.src);
+
+    await session.send(
+      <>
+        {session.channel ? <at id={session.userId} /> : ""}
+        <i18n path=".pleaseSendImage" />
+      </>
+    );
+    const [resCode] = h.select((await session.prompt()) || [], "img");
+    if (resCode && resCode.attrs.src) return generate(resCode.attrs.src);
+
+    return (
+      <>
+        {session.channel ? <at id={session.userId} /> : ""}
+        <i18n path=".jobCanceled" />
+      </>
+    );
   });
 }
