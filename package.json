@@ -17,7 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/TTsdzb/koishi-plugin-maifriend-image.git"
   },
-  "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
